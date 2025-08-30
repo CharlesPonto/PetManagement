@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "59665401436",
+    "project_id": "petmanager-b4d43",
+    "storage_bucket": "petmanager-b4d43.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:59665401436:android:3c026a2479cf5b99254899",
+        "android_client_info": {
+          "package_name": "com.example.petmanagement"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUqJ4wVwETgy2nZSwb8oZzNGpNFLw9JDE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

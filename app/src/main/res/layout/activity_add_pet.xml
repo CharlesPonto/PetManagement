@@ -1,0 +1,28 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical" android:padding="16dp"
+        android:layout_width="match_parent" android:layout_height="wrap_content">
+
+        <EditText android:id="@+id/txtName" android:hint="Name"
+            android:layout_width="match_parent" android:layout_height="wrap_content"/>
+        <EditText android:id="@+id/txtGender" android:hint="Gender"
+            android:layout_width="match_parent" android:layout_height="wrap_content"/>
+        <EditText android:id="@+id/txtAge" android:hint="Age" android:inputType="number"
+            android:layout_width="match_parent" android:layout_height="wrap_content"/>
+        <EditText android:id="@+id/txtType" android:hint="Type"
+            android:layout_width="match_parent" android:layout_height="wrap_content"/>
+        <EditText android:id="@+id/txtBreed" android:hint="Breed"
+            android:layout_width="match_parent" android:layout_height="wrap_content"/>
+
+        <ImageView android:id="@+id/ivPetImage"
+            android:layout_width="150dp" android:layout_height="150dp"
+            android:scaleType="centerCrop"/>
+
+        <Button android:id="@+id/btnUpload" android:text="Upload Image"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        <Button android:id="@+id/btnSave" android:text="Save Pet"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+    </LinearLayout>
+</ScrollView>
