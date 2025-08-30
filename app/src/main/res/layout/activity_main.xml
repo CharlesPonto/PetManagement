@@ -1,15 +1,54 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F9F9F9">
 
+    <!-- Title -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:text="🐾 Pet Management"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="#333333"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="36dp"
+        android:background="#FFFFFF"
+        android:elevation="4dp" />
+
+    <!-- Search Bar -->
+    <SearchView
+        android:id="@+id/searchPet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:queryHint="Search pets..."
+        android:iconifiedByDefault="false"
+        android:layout_below="@id/tvTitle"
+        android:layout_margin="12dp"
+        android:background="@android:drawable/editbox_background_normal" />
+
+    <!-- RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerPets"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/searchPet"
+        android:padding="12dp"
+        android:clipToPadding="false" />
+
+    <!-- Floating Add Button -->
     <Button
         android:id="@+id/btnAddPet"
+        android:text="+ Add Pet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Pet" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="#2196F3"
+        android:textColor="#FFFFFF"
+        android:padding="12dp"
+        android:elevation="6dp" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</LinearLayout>
+</RelativeLayout>

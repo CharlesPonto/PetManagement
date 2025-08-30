@@ -1,28 +1,133 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="#F9F9F9">
 
     <LinearLayout
-        android:orientation="vertical" android:padding="16dp"
-        android:layout_width="match_parent" android:layout_height="wrap_content">
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="30dp"
 
-        <EditText android:id="@+id/txtName" android:hint="Name"
-            android:layout_width="match_parent" android:layout_height="wrap_content"/>
-        <EditText android:id="@+id/txtGender" android:hint="Gender"
-            android:layout_width="match_parent" android:layout_height="wrap_content"/>
-        <EditText android:id="@+id/txtAge" android:hint="Age" android:inputType="number"
-            android:layout_width="match_parent" android:layout_height="wrap_content"/>
-        <EditText android:id="@+id/txtType" android:hint="Type"
-            android:layout_width="match_parent" android:layout_height="wrap_content"/>
-        <EditText android:id="@+id/txtBreed" android:hint="Breed"
-            android:layout_width="match_parent" android:layout_height="wrap_content"/>
+        android:gravity="center_horizontal">
 
-        <ImageView android:id="@+id/ivPetImage"
-            android:layout_width="150dp" android:layout_height="150dp"
-            android:scaleType="centerCrop"/>
+        <!-- Title -->
+        <TextView
+            android:text="Add New Pet"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:layout_marginBottom="24dp"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-        <Button android:id="@+id/btnUpload" android:text="Upload Image"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-        <Button android:id="@+id/btnSave" android:text="Save Pet"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        <!-- Name -->
+        <EditText
+            android:id="@+id/txtName"
+            android:hint="Pet Name"
+            android:textColor="#000000"
+            android:textColorHint="#777777"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"
+            android:background="@android:drawable/edit_text" />
+
+        <!-- Gender -->
+        <Spinner
+            android:id="@+id/spinnerGender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Breed -->
+        <Spinner
+            android:id="@+id/spinnerBreed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Age -->
+        <EditText
+            android:id="@+id/txtAge"
+            android:hint="Age"
+            android:inputType="number"
+            android:textColor="#000000"
+            android:textColorHint="#777777"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"
+            android:background="@android:drawable/edit_text" />
+
+        <!-- Type -->
+        <EditText
+            android:id="@+id/txtType"
+            android:hint="Type (Dog, Cat, etc.)"
+            android:textColor="#000000"
+            android:textColorHint="#777777"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"
+            android:background="@android:drawable/edit_text" />
+
+        <!-- Price -->
+        <EditText
+            android:id="@+id/txtPrice"
+            android:hint="Price"
+            android:inputType="numberDecimal"
+            android:textColor="#000000"
+            android:textColorHint="#777777"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"
+            android:background="@android:drawable/edit_text" />
+
+        <!-- DOB -->
+        <EditText
+            android:id="@+id/txtDob"
+            android:hint="Date of Birth"
+            android:focusable="false"
+            android:clickable="true"
+            android:textColor="#000000"
+            android:textColorHint="#777777"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:layout_marginBottom="20dp"
+            android:background="@android:drawable/edit_text" />
+
+        <!-- Image -->
+        <ImageView
+            android:id="@+id/ivPetImage"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:scaleType="centerCrop"
+            android:background="#DDDDDD"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Upload Button -->
+        <Button
+            android:id="@+id/btnUpload"
+            android:text="Upload Image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FF9800"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Save Button -->
+        <Button
+            android:id="@+id/btnSave"
+            android:text="Save Pet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#4CAF50"
+            android:textColor="#FFFFFF" />
+
     </LinearLayout>
 </ScrollView>
