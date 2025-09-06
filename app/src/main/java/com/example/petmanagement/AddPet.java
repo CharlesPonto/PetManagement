@@ -1,31 +1,24 @@
 package com.example.petmanagement;
 
 import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.net.Uri;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.*;
-import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
-import java.util.Calendar;
+import java.util.*;
 
 public class AddPet extends AppCompatActivity {
 
-    EditText txtName, txtAge, txtType, txtPrice, txtDob;
-    Spinner spinnerGender, spinnerBreed;
-    ImageView ivPetImage;
-    Button btnUpload, btnSave;
-    Uri imageUri;
+    EditText txtName, txtAge, txtPrice, txtDob;
+    Spinner spinnerGender, spinnerType, spinnerBreed;
+    Button btnSave;
     DatabaseReference petsRef;
-    StorageReference storageRef;
+
+    ArrayAdapter<String> typeAdapter, breedAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,30 +28,63 @@ public class AddPet extends AppCompatActivity {
         // Find views
         txtName = findViewById(R.id.txtName);
         txtAge = findViewById(R.id.txtAge);
-        txtType = findViewById(R.id.txtType);
         txtPrice = findViewById(R.id.txtPrice);
         txtDob = findViewById(R.id.txtDob);
         spinnerGender = findViewById(R.id.spinnerGender);
+        spinnerType = findViewById(R.id.spinnerType);
         spinnerBreed = findViewById(R.id.spinnerBreed);
-        ivPetImage = findViewById(R.id.ivPetImage);
-        btnUpload = findViewById(R.id.btnUpload);
         btnSave = findViewById(R.id.btnSave);
 
         petsRef = FirebaseDatabase.getInstance().getReference("pets");
-        storageRef = FirebaseStorage.getInstance().getReference("pet_images");
 
-        // Spinner setup
+        // Gender Spinner
         ArrayAdapter<String> genderAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_spinner_item,
                 new String[]{"Male", "Female"});
         genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerGender.setAdapter(genderAdapter);
 
-        ArrayAdapter<String> breedAdapter = new ArrayAdapter<>(
+        // Type Spinner from TypeManager
+        typeAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_spinner_item,
-                new String[]{"Persian", "Siamese", "Bulldog", "Golden Retriever", "Parrot"});
+                TypeManager.getTypes(this));
+        typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerType.setAdapter(typeAdapter);
+
+        // Breed Spinner from BreedManager
+        breedAdapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item,
+                BreedManager.getBreeds(this));
         breedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerBreed.setAdapter(breedAdapter);
+
+        // Handle Type Spinner selection
+        spinnerType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, android.view.View view, int position, long id) {
+                String selected = spinnerType.getSelectedItem().toString();
+                if (selected.equals("Add New Type...")) {
+                    showAddDialog("Type");
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        // Handle Breed Spinner selection
+        spinnerBreed.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, android.view.View view, int position, long id) {
+                String selected = spinnerBreed.getSelectedItem().toString();
+                if (selected.equals("Add New Breed...")) {
+                    showAddDialog("Breed");
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
 
         // Date picker for DOB
         txtDob.setOnClickListener(v -> {
@@ -72,22 +98,30 @@ public class AddPet extends AppCompatActivity {
             dpd.show();
         });
 
-        btnUpload.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_PICK);
-            intent.setType("image/*");
-            startActivityForResult(intent, 101);
-        });
-
         btnSave.setOnClickListener(v -> savePet());
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 101 && resultCode == RESULT_OK && data != null) {
-            imageUri = data.getData();
-            ivPetImage.setImageURI(imageUri);
-        }
+    private void showAddDialog(String type) {
+        EditText input = new EditText(this);
+        new AlertDialog.Builder(this)
+                .setTitle("Add New " + type)
+                .setView(input)
+                .setPositiveButton("Add", (dialog, which) -> {
+                    String newItem = input.getText().toString().trim();
+                    if (!newItem.isEmpty()) {
+                        if (type.equals("Type")) {
+                            TypeManager.addType(this, newItem);
+                            typeAdapter.notifyDataSetChanged();
+                            spinnerType.setSelection(TypeManager.getTypes(this).indexOf(newItem));
+                        } else {
+                            BreedManager.addBreed(this, newItem);
+                            breedAdapter.notifyDataSetChanged();
+                            spinnerBreed.setSelection(BreedManager.getBreeds(this).indexOf(newItem));
+                        }
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
     }
 
     private void savePet() {
@@ -98,13 +132,10 @@ public class AddPet extends AppCompatActivity {
         }
 
         String name = txtName.getText().toString();
-
-        // ✅ Get values from Spinner
         String gender = spinnerGender.getSelectedItem().toString();
+        String type = spinnerType.getSelectedItem().toString();
         String breed = spinnerBreed.getSelectedItem().toString();
-        String type = txtType.getText().toString();
 
-        // ✅ Price & DOB
         double price = 0;
         try {
             price = Double.parseDouble(txtPrice.getText().toString());
@@ -119,35 +150,10 @@ public class AddPet extends AppCompatActivity {
             Log.e("AddPet", "⚠ Age not valid, defaulting to 0");
         }
 
-        if (imageUri != null) {
-            // ✅ Show progress while uploading
-            ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setMessage("Uploading...");
-            progressDialog.show();
+        Pet pet = new Pet(id, name, gender, age, type, breed, price, dob, "");
+        petsRef.child(id).setValue(pet);
 
-            StorageReference imgRef = storageRef.child(id + ".jpg");
-            int finalAge = age;
-            double finalPrice = price;
-
-            imgRef.putFile(imageUri)
-                    .addOnSuccessListener(taskSnapshot ->
-                            imgRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                                Pet pet = new Pet(id, name, gender, finalAge, type, breed, finalPrice, dob, uri.toString());
-                                petsRef.child(id).setValue(pet);
-                                progressDialog.dismiss();
-                                Toast.makeText(this, "✅ Pet Added", Toast.LENGTH_SHORT).show();
-                                finish();
-                            }))
-                    .addOnFailureListener(e -> {
-                        progressDialog.dismiss();
-                        Log.e("AddPet", "Upload failed", e); // 👈 Add this
-                        Toast.makeText(this, "❌ Upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                    });
-        } else {
-            Pet pet = new Pet(id, name, gender, age, type, breed, price, dob, "");
-            petsRef.child(id).setValue(pet);
-            Toast.makeText(this, "✅ Pet Added (no image)", Toast.LENGTH_SHORT).show();
-            finish();
-        }
+        Toast.makeText(this, "✅ Pet Added", Toast.LENGTH_SHORT).show();
+        finish();
     }
 }

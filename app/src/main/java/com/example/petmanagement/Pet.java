@@ -33,7 +33,6 @@ public class Pet {
     public String getType() { return type; }
     public String getBreed() { return breed; }
     public String getImageUrl() { return imageUrl; }
-
     public double getPrice() { return price; }
     public String getDateOfBirth() { return dateOfBirth; }
 }
